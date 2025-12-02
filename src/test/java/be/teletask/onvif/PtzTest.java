@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class PtzTest {
 
-    private final static String USER_NAME = "admin";
-    private final static String PASSWORD = "a1234567";
+    private final static String USER_NAME = "user";
+    private final static String PASSWORD = "qwe12345";
 
-    private final static String IP = "192.168.0.136";
+    private final static String IP = "192.168.1.201";
 
     public static OnvifManager ONVIF_MANGER = new OnvifManager();
 
@@ -68,5 +68,40 @@ public class PtzTest {
         Thread.sleep(10);
         // 停止
         ONVIF_MANGER.sendStopRequest(ONVIF_DEVICE, token, true, true);
+    }
+
+    @Test
+    public void ptzMoveDirections() throws Exception {
+        List<OnvifMediaProfile> mediaProfiles = ONVIF_MANGER.getMediaProfiles(ONVIF_DEVICE);
+        String token = mediaProfiles.get(0).getToken();
+
+        // 向上移动
+        System.out.println("Moving UP...");
+        ONVIF_MANGER.sendMoveRequestAndBody(ONVIF_DEVICE, token, 0, 0.5, 0);
+        Thread.sleep(1000);
+        ONVIF_MANGER.sendStopRequest(ONVIF_DEVICE, token, true, true);
+        Thread.sleep(500);
+
+        // 向下移动
+        System.out.println("Moving DOWN...");
+        ONVIF_MANGER.sendMoveRequestAndBody(ONVIF_DEVICE, token, 0, -0.5, 0);
+        Thread.sleep(1000);
+        ONVIF_MANGER.sendStopRequest(ONVIF_DEVICE, token, true, true);
+        Thread.sleep(500);
+
+        // 向左移动
+        System.out.println("Moving LEFT...");
+        ONVIF_MANGER.sendMoveRequestAndBody(ONVIF_DEVICE, token, -0.5, 0, 0);
+        Thread.sleep(1000);
+        ONVIF_MANGER.sendStopRequest(ONVIF_DEVICE, token, true, true);
+        Thread.sleep(500);
+
+        // 向右移动
+        System.out.println("Moving RIGHT...");
+        ONVIF_MANGER.sendMoveRequestAndBody(ONVIF_DEVICE, token, 0.5, 0, 0);
+        Thread.sleep(1000);
+        ONVIF_MANGER.sendStopRequest(ONVIF_DEVICE, token, true, true);
+
+        System.out.println("PTZ direction test completed!");
     }
 }
